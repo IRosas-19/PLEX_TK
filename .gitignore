@@ -1,0 +1,22 @@
+# Variables de entorno y secretos
+.env
+.env.*
+
+# Entorno virtual de Python
+venv/
+env/
+ENV/
+
+# Archivos de compilación (PyInstaller)
+build/
+dist/
+*.spec
+
+# Archivos temporales y caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Configuración del editor o IDE
+.vscode/
+.idea/
