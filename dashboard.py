@@ -1,5 +1,19 @@
 import os
 import sys
+import warnings
+
+# Silenciar el aviso de deprecación de asyncio en versiones recientes de Python
+warnings.filterwarnings("ignore", category=DeprecationWarning, module="asyncio")
+
+# Ignorar excepciones de reconexión/cierre de socket brusco en Windows
+if sys.platform == 'win32':
+    try:
+        from asyncio import ProactorEventLoop
+        # Evita el traceback en consola cuando un cliente WebBrowser cierra el socket
+        ProactorEventLoop._call_connection_lost = lambda self, exc=None: None
+    except Exception:
+        pass
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -173,7 +187,7 @@ with tab_dashboard:
                 },
                 hole=0.4
             )
-            st.plotly_chart(fig_estado, use_container_width=True)
+            st.plotly_chart(fig_estado, width="stretch")
         else:
             st.info("No hay registros de tickets.")
 
@@ -183,12 +197,12 @@ with tab_dashboard:
             df_tec = df_tickets['tecnico'].value_counts().reset_index()
             df_tec.columns = ['Técnico', 'Cantidad']
             fig_tec = px.bar(df_tec, x='Técnico', y='Cantidad', color='Cantidad', color_continuous_scale='Blues')
-            st.plotly_chart(fig_tec, use_container_width=True)
+            st.plotly_chart(fig_tec, width="stretch")
         else:
             st.info("No hay datos de técnicos asignados.")
 
     st.subheader("📋 Registro de Tickets Integrados")
-    st.dataframe(df_tickets, use_container_width=True, hide_index=True)
+    st.dataframe(df_tickets, width="stretch", hide_index=True)
 
 # TAB 2: DETALLE MTTR Y CONCILIACIÓN CON VORTEX
 with tab_mttr_vortex:
@@ -287,7 +301,7 @@ with tab_multimedia:
                     col_curr.image(
                         ruta_foto, 
                         caption=f"Foto #{idx+1} - {nombre_archivo}", 
-                        use_container_width=True
+                        width="stretch"
                     )
             else:
                 st.warning(f"No se encontraron imágenes en: `{carpeta_ticket}`")
