@@ -484,16 +484,15 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
 
 async def abrir_bot_materiales(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Sustituye 'MaterialesAlmacen_bot' por el alias real de tu nuevo bot
-    url_bot_materiales = "https://t.me/Materiales_Zooy_bot?start=solicitud"
+    url_bot_materiales = "https://t.me/Materiales_Zooy_bot?start"
     
     keyboard = [
         [InlineKeyboardButton("📦 Abrir Solicitud de Materiales", url=url_bot_materiales)]
     ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
 
     await update.message.reply_text(
         "Haz clic en el botón de abajo para ir al sistema de **Solicitud de Materiales**:",
-        reply_markup=reply_markup,
+        reply_markup=InlineKeyboardMarkup(keyboard),
         parse_mode="Markdown"
     )
 
