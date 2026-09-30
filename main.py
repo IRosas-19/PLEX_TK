@@ -5,6 +5,7 @@ import os
 import sys
 import re
 from datetime import datetime
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from contextlib import contextmanager
 import mysql.connector
 from dotenv import load_dotenv  # type: ignore
@@ -478,6 +479,24 @@ async def descargar_archivo_con_reintentos(bot, file_id, ruta_local, ticket_id, 
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
     logging.error("❌ Excepción no controlada en el bot", exc_info=context.error)
 
+
+# Solcitud de materialess
+
+async def abrir_bot_materiales(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # Sustituye 'MaterialesAlmacen_bot' por el alias real de tu nuevo bot
+    url_bot_materiales = "https://t.me/Materiales_Zooy_bot?start=solicitud"
+    
+    keyboard = [
+        [InlineKeyboardButton("📦 Abrir Solicitud de Materiales", url=url_bot_materiales)]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    await update.message.reply_text(
+        "Haz clic en el botón de abajo para ir al sistema de **Solicitud de Materiales**:",
+        reply_markup=reply_markup,
+        parse_mode="Markdown"
+    )
+
 # ----------------------------------------------------
 # 4. MANEJO DE ARCHIVOS Y MENSAJES (MÚLTIPLES TIPOS)
 # ----------------------------------------------------
@@ -562,6 +581,7 @@ async def guardar_evidencia(update: Update, context: ContextTypes.DEFAULT_TYPE):
             logging.warning(f"No se pudo archivar el hilo: {e}")
         return
 
+
     # B) PROCESAMIENTO DE EVIDENCIAS Y MENSAJES MTTR
     try:
         if msg.location:
@@ -628,6 +648,7 @@ if __name__ == '__main__':
     app.add_handler(CommandHandler("cerrar", solicitar_cerrar_ticket))
     app.add_handler(CommandHandler("vincular", vincular_ticket))
     app.add_handler(CommandHandler("consultar", consultar_ticket))
+    app.add_handler(CommandHandler("materiales", abrir_bot_materiales))
 
     app.add_handler(MessageHandler(
         filters.LOCATION | filters.PHOTO | filters.Document.ALL | filters.VOICE | filters.AUDIO | filters.VIDEO | filters.TEXT,
